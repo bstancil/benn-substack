@@ -4,6 +4,7 @@ Batch markdown posts by quarter for BookLM.
 Creates combined files with all posts from each quarter.
 """
 
+import argparse
 import csv
 from pathlib import Path
 from datetime import datetime
@@ -55,19 +56,28 @@ def load_markdown_content(markdown_path):
 
 def main():
     """Batch markdown posts by quarter."""
+    parser = argparse.ArgumentParser(description='Batch markdown posts by quarter.')
+    parser.add_argument('export_dir', help='Export directory name (e.g., export-2025-01-20)')
+    args = parser.parse_args()
+
     # Use paths relative to script location
     script_dir = Path(__file__).parent
     root_dir = script_dir.parent
 
-    csv_path = root_dir / 'posts.csv'
+    csv_path = root_dir / args.export_dir / 'posts.csv'
     markdown_dir = root_dir / 'posts'
     output_dir = root_dir / 'posts-batched'
+
+    # Validate CSV exists
+    if not csv_path.exists():
+        print(f"Error: posts.csv not found: {csv_path}")
+        return 1
 
     # Create output directory if it doesn't exist
     output_dir.mkdir(exist_ok=True)
 
     # Load posts organized by quarter
-    print("Loading post metadata and organizing by quarter...")
+    print(f"Loading post metadata from {csv_path}...")
     posts_by_quarter = load_posts_by_quarter(csv_path)
     print(f"Found posts in {len(posts_by_quarter)} quarters\n")
 

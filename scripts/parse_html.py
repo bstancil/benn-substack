@@ -3,7 +3,7 @@
 Convert Substack HTML blog posts to clean markdown.
 """
 
-import os
+import argparse
 import re
 import csv
 from pathlib import Path
@@ -241,19 +241,32 @@ def load_post_metadata(csv_path):
 
 def main():
     """Convert all HTML files in the posts directory."""
+    parser = argparse.ArgumentParser(description='Convert Substack HTML exports to markdown.')
+    parser.add_argument('export_dir', help='Export directory name (e.g., export-2025-01-20)')
+    args = parser.parse_args()
+
     # Use paths relative to script location
     script_dir = Path(__file__).parent
     root_dir = script_dir.parent
 
-    posts_dir = root_dir / '2025-11-08' / 'posts'
+    posts_dir = root_dir / args.export_dir / 'posts'
     output_dir = root_dir / 'posts'
-    csv_path = root_dir / 'posts.csv'
+    csv_path = root_dir / args.export_dir / 'posts.csv'
+
+    # Validate input directory exists
+    if not posts_dir.exists():
+        print(f"Error: Posts directory not found: {posts_dir}")
+        return 1
+
+    if not csv_path.exists():
+        print(f"Error: posts.csv not found: {csv_path}")
+        return 1
 
     # Create output directory if it doesn't exist
     output_dir.mkdir(exist_ok=True)
 
     # Load post metadata
-    print("Loading post metadata from CSV...")
+    print(f"Loading post metadata from {csv_path}...")
     post_metadata = load_post_metadata(csv_path)
     print(f"Loaded metadata for {len(post_metadata)} posts")
 
@@ -273,6 +286,7 @@ def main():
 
     print(f"\nConversion complete!")
     print(f"  Markdown files: {output_dir}")
+    return 0
 
 
 if __name__ == '__main__':

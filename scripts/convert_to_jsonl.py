@@ -4,6 +4,7 @@ Convert markdown posts to JSONL format.
 Combines data from posts.csv with markdown content.
 """
 
+import argparse
 import json
 import csv
 from pathlib import Path
@@ -39,16 +40,25 @@ def load_markdown_content(markdown_path):
 
 def main():
     """Convert markdown posts to JSONL."""
+    parser = argparse.ArgumentParser(description='Convert markdown posts to JSONL format.')
+    parser.add_argument('export_dir', help='Export directory name (e.g., export-2025-01-20)')
+    args = parser.parse_args()
+
     # Use paths relative to script location
     script_dir = Path(__file__).parent
     root_dir = script_dir.parent
 
-    csv_path = root_dir / 'posts.csv'
+    csv_path = root_dir / args.export_dir / 'posts.csv'
     markdown_dir = root_dir / 'posts'
     output_path = root_dir / 'posts.jsonl'
 
+    # Validate CSV exists
+    if not csv_path.exists():
+        print(f"Error: posts.csv not found: {csv_path}")
+        return 1
+
     # Load post metadata
-    print("Loading post metadata from CSV...")
+    print(f"Loading post metadata from {csv_path}...")
     posts_metadata = load_posts_metadata(csv_path)
     print(f"Loaded metadata for {len(posts_metadata)} posts")
 
