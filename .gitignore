@@ -1,4 +1,5 @@
 .DS_Store
 
-# Raw exports
+# Raw exports and charts
 export-*
+charts
