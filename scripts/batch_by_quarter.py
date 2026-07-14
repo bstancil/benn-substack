@@ -54,17 +54,25 @@ def load_markdown_content(markdown_path):
         return f.read()
 
 
+def resolve_csv_path(root_dir, source):
+    """Accept either an export directory name or a direct posts.csv path."""
+    as_dir = root_dir / source / 'posts.csv'
+    if as_dir.exists():
+        return as_dir
+    return Path(source)
+
+
 def main():
     """Batch markdown posts by quarter."""
     parser = argparse.ArgumentParser(description='Batch markdown posts by quarter.')
-    parser.add_argument('export_dir', help='Export directory name (e.g., export-2025-01-20)')
+    parser.add_argument('source', help='Export directory name (e.g., export-2025-01-20) or a posts.csv path')
     args = parser.parse_args()
 
     # Use paths relative to script location
     script_dir = Path(__file__).parent
     root_dir = script_dir.parent
 
-    csv_path = root_dir / args.export_dir / 'posts.csv'
+    csv_path = resolve_csv_path(root_dir, args.source)
     markdown_dir = root_dir / 'posts'
     output_dir = root_dir / 'posts-batched'
 

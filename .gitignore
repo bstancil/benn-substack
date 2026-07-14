@@ -1,5 +1,14 @@
 .DS_Store
+.claude
 
-# Raw exports and charts
+# Raw exports
 export-*
-charts
+
+# Local-only data (stats are private; repo is public)
+data/
+dashboard/
+.env
+scripts/__pycache__/
+
+# Personal local-only pipeline extensions
+scripts/local/

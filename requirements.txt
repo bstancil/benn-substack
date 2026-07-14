@@ -1,1 +1,5 @@
 beautifulsoup4
+requests
+duckdb
+google-auth
+google-cloud-bigquery
