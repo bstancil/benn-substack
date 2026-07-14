@@ -63,7 +63,8 @@ WHERE c.markdown ILIKE '%data warehouse%' ORDER BY p.post_date DESC;
 ```
 
 The full post texts are also in `posts/*.md` and `posts.jsonl` if grepping is
-easier than SQL.
+easier than SQL. A fuller, self-contained guide to the database (exact
+columns, quirks, more queries) lives at `data/schema.md` (gitignored).
 
 ## Pipeline map (scripts/)
 
